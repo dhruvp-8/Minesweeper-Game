@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="/Minesweeper/css/bulma.css" rel="stylesheet">
+    <link href="/Minesweeper/css/main.css" rel="stylesheet">
+    <script src="/Minesweeper/js/jquery.min.js"></script>
+    <script src="/Minesweeper/js/p5.js"></script>
+    <script src="/Minesweeper/js/p5.dom.js"></script>
+    <script src="sketch.js"></script>
+    <script src="cell.js"></script>
+  </head>
+  <body>
+      <nav class="navbar">
+          <div class="navbar-brand">
+                <a href="" class="nav-item">
+                  <h1 class="title is-4">Minesweeper</h1>
+                </a>
+
+                <a href="" class="nav-item">
+                  <span class="icon">
+                    <i class="fa fa-github"></i>
+                  </span>
+                </a>
+                <a href="" class="nav-item">
+                  <span class="icon">
+                    <i class="fa fa-twitter"></i>
+                  </span>
+                </a>
+                <div class="navbar-burger burger" data-target="myNavbar">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+               </div>
+            </div>
+           <div id="myNavbar" class="navbar-menu">
+               <div class="navbar-end">
+                   <a href="#" class="nav-item">Home</a>
+                   <a href="#" class="nav-item">Leaderboards</a>
+                   <div class="navbar-item">
+                     <a href="#" class="nav-item button is-info is-focused" id="signin">
+                       <span>Sign In</span>
+                     </a>
+                   </div>
+               </div>
+           </div>
+      </nav>
+    <hr class="navbar-divider">
+    <div id="sketch-holder">
+    </div>
+  <div class="modal">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">User Authentication</p>
+        <button class="delete close-modal"></button>
+      </header>
+
+      <section class="modal-card-body">
+        <div class="tabs is-boxed">
+          <ul>
+            <li class="is-active logs"><a>Login</a></li>
+            <li class="reg"><a>Register</a></li>
+          </ul>
+        </div>
+        <div id="success" hidden>
+          <article class="message is-success" hidden>
+            <div class="message-body" id="success-msg">
+            </div>
+        </article>
+        <br>
+      </div>
+
+      <div id="error" hidden>
+        <article class="message is-danger">
+          <div class="message-body" id="error-msg">
+          </div>
+      </article>
+      <br>
+     </div>
+        <h4><b><i>*Required Fields</i></b></h4>
+        <hr>
+        <div id="login">
+            <div class="field">
+              <label class="label"><i>*Username:</i></label>
+              <p class="control">
+                <input class="input" type="text" id="username1" placeholder="Text input">
+              </p>
+            </div>
+
+            <div class="field">
+              <label class="label"><i>*Password:</i></label>
+              <p class="control">
+                <input class="input" type="password" id="password1" placeholder="Text input">
+              </p>
+            </div>
+
+            <br>
+
+            <div class="field">
+              <button class="button is-info is-focused" onclick="login()">Login</button>
+            </div>
+        </div>
+
+        <div id="register">
+              <div class="field">
+                <label class="label"><i>*Username:</i></label>
+                <p class="control">
+                  <input class="input" type="text" id="username2" placeholder="Text input">
+                </p>
+              </div>
+
+              <div class="field">
+                <label class="label"><i>*Email:<i></label>
+                <p class="control">
+                  <input class="input" type="text" id="email2" placeholder="Text input">
+                </p>
+              </div>
+
+              <div class="field">
+                <label class="label"><i>*Password:</i></label>
+                <p class="control">
+                  <input class="input" type="password" id="password2" placeholder="Text input">
+                </p>
+              </div>
+
+              <div class="field">
+                <label class="label"><i>*Confirm Password:</i></label>
+                <p class="control">
+                  <input class="input" type="password" id="cpassword2" placeholder="Text input">
+                </p>
+              </div>
+
+              <br>
+
+              <div class="field">
+                <button class="button is-info is-focused" onclick="register()">Register</button>
+              </div>
+        </div>
+    </section>
+    <footer class="modal-card-foot">
+      <a class="button is-danger is-focused close-modal is-pulled-right move-right">Cancel</a>
+    </footer>
+    </div>
+</div>
+  <script>
+
+    var message = '';
+    var smessage = '';
+    $('#signin').click(function(){
+      $('.modal').addClass('is-active');
+      $('#error').hide();
+      $('#success').hide();
+      $('#login').show();
+      $('#register').hide();
+    });
+
+    $('.reg').click(function(){
+      $('#error').hide();
+      $('#success').hide();
+      $('#login').hide();
+      $('.reg').addClass('is-active');
+      $('.logs').removeClass('is-active');
+      $('#register').show();
+    });
+
+    $('.logs').click(function(){
+      $('#error').hide();
+      $('#success').hide();
+      $('#register').hide();
+      $('.logs').addClass('is-active');
+      $('.reg').removeClass('is-active');
+      $('#login').show();
+    });
+
+    $('.close-modal').click(function(){
+      $('.modal').removeClass('is-active');
+    });
+
+    function login(){
+      var username = $('#username1').val();
+      var password = $('#password1').val();
+      if(username === '' || password === ''){
+        message = 'Please Enter in Required Fields.';
+        document.getElementById('error-msg').innerHTML = message;
+        $('#error').show();
+        $('#success').hide();
+      }
+      else{
+        smessage = 'Login Successful! Redirecting you to Home Page.'
+        document.getElementById('success-msg').innerHTML = smessage;
+        $('#error').hide();
+        $('#success').show();
+      }
+
+    }
+
+    function register(){
+      var username = $('#username2').val();
+      var password = $('#password2').val();
+      var email = $('#email2').val();
+      var confirmpass = $('#cpassword2').val();
+      if(username === '' || email === '' || password === '' || confirmpass === ''){
+        message = 'Please Enter in Required Fields.';
+         document.getElementById('error-msg').innerHTML = message;
+         $('#error').show();
+         $('#success').hide();
+      }
+      else{
+        smessage = 'Registered Successfully! Redirecting you to Home Page.'
+        document.getElementById('success-msg').innerHTML = smessage;
+        $('#error').hide();
+        $('#success').show();
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+
+  // Get all "navbar-burger" elements
+  var $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+
+  // Check if there are any nav burgers
+  if ($navbarBurgers.length > 0) {
+
+    // Add a click event on each of them
+    $navbarBurgers.forEach(function ($el) {
+      $el.addEventListener('click', () => {
+
+        // Get the target from the "data-target" attribute
+        var target = $el.dataset.target;
+        var $target = document.getElementById(target);
+
+        // Toggle the class on both the "navbar-burger" and the "navbar-menu"
+        $el.classList.toggle('is-active');
+        $target.classList.toggle('is-active');
+
+      });
+    });
+  }
+
+});
+  </script>
+  </body>
+</html>
